@@ -51,10 +51,10 @@ export class UserDatabase extends BaseDatabase {
     }
 
 
-  public async getUserByEmail(email: string): Promise<User | undefined> {
+  public async getUser(email?: string, nickname?: string): Promise<User | undefined> {
     const result = await super.getConnection()
       .raw(`
-        SELECT * FROM ${this.tableName} WHERE email = "${email}";
+        SELECT * FROM ${this.tableName} WHERE email = "${email}" OR nickname = "${nickname}";
       `)
 
     return this.toModel(result[0][0]);

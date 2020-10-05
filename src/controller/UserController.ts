@@ -42,6 +42,7 @@ export class UserController {
         try {
             const loginData: LoginInputDTO = {
                 email: req.body.email as string,
+                nickname: req.body.nickname as string,
                 password: req.body.password as string
             };
 
