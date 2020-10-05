@@ -84,8 +84,7 @@ export interface UserInputDTO{
 }
 
 export interface LoginInputDTO{
-    email?: string;
-    nickname?: string;
+    emailOrNickname: string;
     password: string;
 }
 
