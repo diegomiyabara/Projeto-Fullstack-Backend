@@ -41,8 +41,7 @@ export class UserController {
     async login(req: Request, res: Response) {
         try {
             const loginData: LoginInputDTO = {
-                email: req.body.email as string,
-                nickname: req.body.nickname as string,
+                emailOrNickname: req.body.emailOrNickname as string,
                 password: req.body.password as string
             };
 

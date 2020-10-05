@@ -52,7 +52,7 @@ export class UserBusiness {
     }
 
     async login(user: LoginInputDTO) {
-        if(!user.email && !user.nickname) {
+        if(!user.emailOrNickname) {
             throw new InvalidParameterError("Please inform your email or nickname!")
         }
 
@@ -60,7 +60,7 @@ export class UserBusiness {
             throw new InvalidParameterError("Please inform your password!")
         }
 
-        const userDb = await this.userDatabase.getUser(user.email, user.nickname);
+        const userDb = await this.userDatabase.getUser(user.emailOrNickname);
 
         if (!userDb) {
             throw new NotFoundError("User not found.")
