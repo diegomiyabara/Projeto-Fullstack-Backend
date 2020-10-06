@@ -50,3 +50,10 @@ export interface AlbumInputDTO{
     name: string;
     description: string;
 }
+
+export interface AlbumOutputDTO{
+    id: string,
+    name: string,
+    description: string,
+    user_id: string
+}
