@@ -2,7 +2,7 @@ import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator";
 import { InvalidParameterError } from "../error/InvalidParameterError";
 import { NotFoundError } from "../error/NotFoundError";
-import { Album, AlbumInputDTO } from "../model/Album";
+import { Album, AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
 import { AlbumDatabase } from "../data/AlbumDatabase";
 import { InsuficientAuth } from "../error/InsuficientAuth";
 
@@ -46,7 +46,7 @@ export class AlbumBusiness {
         return response
     }
 
-    async getAlbumById (albumId: string, token: string): Promise<Album> {
+    async getAlbumById (albumId: string, token: string): Promise<AlbumOutputDTO> {
         const user = this.authenticator.getData(token)
 
         const response = await this.albumDatabase.getAlbumById(albumId)
