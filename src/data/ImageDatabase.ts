@@ -8,6 +8,7 @@ export class ImageDatabase extends BaseDatabase {
     public async addImage(
         id: string,
         description: string,
+        photoUrl: string,
         user_id: string,
         album_id: string
     ): Promise<void> {
@@ -16,6 +17,7 @@ export class ImageDatabase extends BaseDatabase {
             .insert({
             id,
             description,
+            photoUrl,
             user_id,
             album_id
             })

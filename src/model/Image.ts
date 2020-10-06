@@ -41,12 +41,14 @@ export class Image{
 
 export interface ImageInputDTO{
     description: string;
+    photoUrl: string;
     album_id: string;
 }
 
-export interface AlbumOutputDTO{
+export interface ImageOutputDTO{
     id: string,
     description: string,
+    photoUrl: string,
     user_id: string,
     album_id: string
 }

@@ -2,7 +2,7 @@ import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator";
 import { InvalidParameterError } from "../error/InvalidParameterError";
 import { NotFoundError } from "../error/NotFoundError";
-import { Album, AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
+import { AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
 import { AlbumDatabase } from "../data/AlbumDatabase";
 import { InsuficientAuth } from "../error/InsuficientAuth";
 
