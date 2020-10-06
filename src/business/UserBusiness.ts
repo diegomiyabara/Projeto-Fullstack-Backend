@@ -46,7 +46,7 @@ export class UserBusiness {
 
         await this.userDatabase.createUser(id, user.name, user.email, user.nickname, hashPassword, user.role);
 
-        const accessToken = this.authenticator.generateToken({ id, role: user.role });
+        const accessToken = this.authenticator.generateToken({ id, name: user.name, role: user.role });
 
         return accessToken;
     }
@@ -68,7 +68,7 @@ export class UserBusiness {
 
         const hashCompare = await this.hashManager.compare(user.password, userDb && userDb.getPassword());
 
-        const accessToken = this.authenticator.generateToken({ id: userDb && userDb.getId(), role: userDb && userDb.getRole() });
+        const accessToken = this.authenticator.generateToken({ id: userDb.getId(),name: userDb.getName(), role: userDb.getRole() });
 
         if (!hashCompare) {
             throw new Error("Invalid Password!");

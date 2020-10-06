@@ -55,5 +55,6 @@ export interface AlbumOutputDTO{
     id: string,
     name: string,
     description: string,
-    user_id: string
+    user_id: string,
+    user_name?: string
 }

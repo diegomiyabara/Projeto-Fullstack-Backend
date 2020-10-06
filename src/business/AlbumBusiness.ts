@@ -26,7 +26,7 @@ export class AlbumBusiness {
         return await this.albumDatabase.createAlbum(id, album.name, album.description, user.id);
     }
 
-    async getAllAlbuns(token: string): Promise<Album[]> {
+    async getAllAlbuns(token: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
         if(user.role !== "ADMIN") {
@@ -38,7 +38,7 @@ export class AlbumBusiness {
         return response
     }
 
-    async getAlbunsByUserId(token: string): Promise<Album[]> {
+    async getAlbunsByUserId(token: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
         const response = await this.albumDatabase.getAlbunsByUserId(user.id)

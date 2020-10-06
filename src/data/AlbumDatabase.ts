@@ -41,19 +41,20 @@ export class AlbumDatabase extends BaseDatabase {
         }
     }
 
-    public async getAllAlbuns() :Promise <Album[]> {
+    public async getAllAlbuns() :Promise <AlbumOutputDTO[]> {
         try {
             const response = await super.getConnection()
-            .select("*")
-            .from(this.tableName)
+            .raw(`SELECT ${this.tableName}.id, ${this.tableName}.name, description, user_id, PROJETO_FULLSTACK_USERS.name as user_name 
+            FROM PROJETO_FULLSTACK_USERS
+            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id;`)
 
-            return response
+            return response[0]
         } catch (error) {
             throw new Error(error.sqlMessage || error.message);
         }
     }
 
-    public async getAlbunsByUserId(user_id: string): Promise<Album[]> {
+    public async getAlbunsByUserId(user_id: string): Promise<AlbumOutputDTO[]> {
         try {
             const response = await super.getConnection()
             .select("*")
