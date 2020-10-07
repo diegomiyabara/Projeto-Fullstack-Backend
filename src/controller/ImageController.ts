@@ -32,4 +32,34 @@ export class ImageController {
             BaseDatabase.destroyConnection()
         }
     }
+
+    async getAlbumImages(req: Request, res: Response) {
+        try {
+            const album_id = req.query.albumId as string
+            const token = req.headers.authorization as string
+
+            const response = await ImageController.imageBusiness.getAlbumImages(album_id, token)
+
+            res.status(200).send({Images: response})
+        } catch (error) {
+            res.status(error.code || 400).send({ message: error.message });
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
+
+    async getImageById(req: Request, res: Response) {
+        try {
+            const id = req.params.id as string
+            const token = req.headers.authorization as string
+
+            const response = await ImageController.imageBusiness.getImageById(id, token)
+
+            res.status(200).send(response)
+        } catch (error) {
+            res.status(error.code || 400).send({ message: error.message });
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
 }

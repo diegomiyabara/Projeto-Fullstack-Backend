@@ -48,6 +48,7 @@ export class Album{
 
 export interface AlbumInputDTO{
     name: string;
+    albumImageUrl: string,
     description: string;
 }
 
@@ -55,6 +56,7 @@ export interface AlbumOutputDTO{
     id: string,
     name: string,
     description: string,
+    albumImageUrl: string,
     user_id: string,
     user_name?: string
 }

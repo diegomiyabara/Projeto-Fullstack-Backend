@@ -17,7 +17,8 @@ export class AlbumController {
         try {
             const input: AlbumInputDTO = {
                 name: req.body.name as string,
-                description: req.body.description as string
+                description: req.body.description as string,
+                albumImageUrl: req.body.albumImageUrl as string
             }
 
             const token = req.headers.authorization as string

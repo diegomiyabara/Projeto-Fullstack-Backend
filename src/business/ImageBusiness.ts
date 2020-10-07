@@ -2,10 +2,11 @@ import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator";
 import { InvalidParameterError } from "../error/InvalidParameterError";
 import { ImageDatabase } from "../data/ImageDatabase";
-import { ImageInputDTO } from "../model/Image";
+import { Image, ImageInputDTO, ImageOutputDTO } from "../model/Image";
 import { AlbumDatabase } from "../data/AlbumDatabase";
 import { AlbumOutputDTO } from "../model/Album";
 import { InsuficientAuth } from "../error/InsuficientAuth";
+import { NotFoundError } from "../error/NotFoundError";
 
 export class ImageBusiness {
 
@@ -34,5 +35,43 @@ export class ImageBusiness {
         await this.imageDatabase.addImage(id, image.description, image.photoUrl, user.id, image.album_id);
 
         return album
+    }
+
+    async getAlbumImages(album_id: string, token: string): Promise<ImageOutputDTO[]> {
+        if (!album_id) {
+            throw new InvalidParameterError("Album id is required.")
+        }
+
+        const user = this.authenticator.getData(token)
+
+        const response = await this.imageDatabase.getAlbumImages(album_id)
+
+        if(response.length === 0) {
+            throw new NotFoundError("No images were found in this album.")
+        }
+
+        response.map((image) => {
+            if(image.user_id !== user.id) {
+                throw new InsuficientAuth("You can only acess your own album images")
+            }
+        })
+
+        return response
+    }
+
+    async getImageById(id: string, token: string): Promise<ImageOutputDTO> {
+        if(!id) {
+            throw new InvalidParameterError("Image id is required")
+        }
+
+        const user = this.authenticator.getData(token)
+
+        const response = await this.imageDatabase.getImageById(id)
+
+        if (response.user_id !== user.id) {
+            throw new InsuficientAuth("You can only acess your own images")
+        }
+
+        return response
     }
 }

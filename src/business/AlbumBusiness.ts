@@ -19,11 +19,23 @@ export class AlbumBusiness {
             throw new InvalidParameterError("All inputs must be filled!")
         }
 
+        if(!album.albumImageUrl) {
+            album.albumImageUrl = ""
+        }
+
         const id = this.idGenerator.generate();
-
+        
         const user = this.authenticator.getData(token)
+        
+        const albunsDb = await this.albumDatabase.getAlbunsByUserId(user.id)
 
-        return await this.albumDatabase.createAlbum(id, album.name, album.description, user.id);
+        albunsDb.map((albumDb:AlbumOutputDTO) => {
+            if(albumDb.name === album.name) {
+                throw new InvalidParameterError(`You already have an album with the name ${album.name}.`)
+            }
+        })
+        
+        return await this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id);
     }
 
     async getAllAlbuns(token: string): Promise<AlbumOutputDTO[]> {
