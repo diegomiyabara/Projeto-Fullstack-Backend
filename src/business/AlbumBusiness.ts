@@ -2,7 +2,7 @@ import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator";
 import { InvalidParameterError } from "../error/InvalidParameterError";
 import { NotFoundError } from "../error/NotFoundError";
-import { Album, AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
+import { AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
 import { AlbumDatabase } from "../data/AlbumDatabase";
 import { InsuficientAuth } from "../error/InsuficientAuth";
 
@@ -19,14 +19,26 @@ export class AlbumBusiness {
             throw new InvalidParameterError("All inputs must be filled!")
         }
 
+        if(!album.albumImageUrl) {
+            album.albumImageUrl = ""
+        }
+
         const id = this.idGenerator.generate();
-
+        
         const user = this.authenticator.getData(token)
+        
+        const albunsDb = await this.albumDatabase.getAlbunsByUserId(user.id)
 
-        return await this.albumDatabase.createAlbum(id, album.name, album.description, user.id);
+        albunsDb.map((albumDb:AlbumOutputDTO) => {
+            if(albumDb.name === album.name) {
+                throw new InvalidParameterError(`You already have an album with the name ${album.name}.`)
+            }
+        })
+        
+        return await this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id);
     }
 
-    async getAllAlbuns(token: string): Promise<Album[]> {
+    async getAllAlbuns(token: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
         if(user.role !== "ADMIN") {
@@ -38,7 +50,7 @@ export class AlbumBusiness {
         return response
     }
 
-    async getAlbunsByUserId(token: string): Promise<Album[]> {
+    async getAlbunsByUserId(token: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
         const response = await this.albumDatabase.getAlbunsByUserId(user.id)

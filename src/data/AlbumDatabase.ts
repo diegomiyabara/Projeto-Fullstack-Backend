@@ -6,22 +6,11 @@ export class AlbumDatabase extends BaseDatabase {
 
     protected tableName: string = "PROJETO_FULLSTACK_ALBUNS";
 
-    private toModel(dbModel?: any): Album | undefined {
-        return (
-        dbModel &&
-        new Album(
-            dbModel.id,
-            dbModel.name,
-            dbModel.description,
-            dbModel.user_id
-        )
-        );
-    }
-
     public async createAlbum(
         id: string,
         name: string,
         description: string,
+        albumImageUrl: string,
         user_id: string
     ): Promise<void> {
         try {
@@ -30,6 +19,7 @@ export class AlbumDatabase extends BaseDatabase {
             id,
             name,
             description,
+            albumImageUrl,
             user_id
             })
             .into(this.tableName);
@@ -41,19 +31,20 @@ export class AlbumDatabase extends BaseDatabase {
         }
     }
 
-    public async getAllAlbuns() :Promise <Album[]> {
+    public async getAllAlbuns() :Promise <AlbumOutputDTO[]> {
         try {
             const response = await super.getConnection()
-            .select("*")
-            .from(this.tableName)
+            .raw(`SELECT ${this.tableName}.id, ${this.tableName}.name, description, albumImageUrl, user_id, PROJETO_FULLSTACK_USERS.name as user_name 
+            FROM PROJETO_FULLSTACK_USERS
+            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id;`)
 
-            return response
+            return response[0]
         } catch (error) {
             throw new Error(error.sqlMessage || error.message);
         }
     }
 
-    public async getAlbunsByUserId(user_id: string): Promise<Album[]> {
+    public async getAlbunsByUserId(user_id: string): Promise<AlbumOutputDTO[]> {
         try {
             const response = await super.getConnection()
             .select("*")
