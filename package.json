@@ -4,7 +4,7 @@
   "description": "Back-end do projeto Full-Stack módulo 6",
   "main": "index.js",
   "scripts": {
-    "test": "clear && echo \\\"Running tests...\\\" && jest",
+    "test": "clear && echo \"Running tests...\" && jest",
     "start:dev": "ts-node-dev ./src/index.ts",
     "start": "tsc && node ./build/index.js"
   },

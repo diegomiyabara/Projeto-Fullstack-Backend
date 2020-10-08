@@ -1,5 +1,5 @@
-import { UserBusiness } from "../business/UserBusiness"
-import { LoginInputDTO, User, UserRole } from "../model/User"
+import { UserBusiness } from "../src/business/UserBusiness"
+import { LoginInputDTO, User, UserRole } from "../src/model/User"
 
 
 let userDatabase = {
