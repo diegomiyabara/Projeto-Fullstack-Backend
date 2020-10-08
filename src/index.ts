@@ -3,6 +3,7 @@ import {AddressInfo} from "net";
 import express from "express";
 import { userRouter } from "./routes/userRouter";
 import { albumRouter } from "./routes/albumRouter";
+import { imageRouter } from "./routes/imageRouter";
 import cors from 'cors'
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(cors({ origin: true }));
 
 app.use("/user", userRouter);
 app.use("/album", albumRouter)
+app.use("/image", imageRouter)
 
 const server = app.listen(process.env.PORT || 3003, () => {
     if (server) {
