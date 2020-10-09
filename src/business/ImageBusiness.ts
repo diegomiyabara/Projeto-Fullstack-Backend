@@ -46,10 +46,6 @@ export class ImageBusiness {
 
         const response = await this.imageDatabase.getAlbumImages(album_id)
 
-        if(response.length === 0) {
-            throw new NotFoundError("No images were found in this album.")
-        }
-
         response.map((image) => {
             if(image.user_id !== user.id) {
                 throw new InsuficientAuth("You can only acess your own album images")
