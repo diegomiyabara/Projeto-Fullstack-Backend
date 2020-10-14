@@ -5,6 +5,7 @@ import { NotFoundError } from "../error/NotFoundError";
 import { AlbumInputDTO, AlbumOutputDTO } from "../model/Album";
 import { AlbumDatabase } from "../data/AlbumDatabase";
 import { InsuficientAuth } from "../error/InsuficientAuth";
+import dayjs from "dayjs";
 
 export class AlbumBusiness {
 
@@ -23,6 +24,8 @@ export class AlbumBusiness {
             album.albumImageUrl = ""
         }
 
+        const today = dayjs().format("YYYY-MM-DD")
+
         const id = this.idGenerator.generate();
         
         const user = this.authenticator.getData(token)
@@ -35,25 +38,29 @@ export class AlbumBusiness {
             }
         })
         
-        return await this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id);
+        return await this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id, today);
     }
 
-    async getAllAlbuns(token: string): Promise<AlbumOutputDTO[]> {
+    async getAllAlbuns(token: string, user_id: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
         if(user.role !== "ADMIN") {
             throw new InsuficientAuth("Only Admins can acess all albuns")
         }
 
-        const response = await this.albumDatabase.getAllAlbuns()
+        const response = await this.albumDatabase.getAllAlbuns(user_id)
 
         return response
     }
 
-    async getAlbunsByUserId(token: string): Promise<AlbumOutputDTO[]> {
+    async getAlbunsByUserId(token: string, hashtag: string, orderDate: string): Promise<AlbumOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
-        const response = await this.albumDatabase.getAlbunsByUserId(user.id)
+        if(orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+            throw new InvalidParameterError("orderDate must be ASC or DESC")
+        }
+
+        const response = await this.albumDatabase.getAlbunsByUserId(user.id, hashtag, orderDate)
 
         return response
     }

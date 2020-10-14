@@ -10,4 +10,5 @@ exports.imageRouter = express_1.default.Router();
 const imageController = new ImageController_1.ImageController();
 exports.imageRouter.post("/", imageController.addImage);
 exports.imageRouter.get("/", imageController.getAlbumImages);
+exports.imageRouter.get("/:id", imageController.getImageById);
 //# sourceMappingURL=imageRouter.js.map

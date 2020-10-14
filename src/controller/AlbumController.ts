@@ -36,8 +36,9 @@ export class AlbumController {
     async getAllAlbuns (req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
+            const user_id = req.body.user_id as string
 
-            const response = await AlbumController.albumBusiness.getAllAlbuns(token)
+            const response = await AlbumController.albumBusiness.getAllAlbuns(token, user_id)
 
             res.status(200).send({Albuns: response})
         } catch (error) {
@@ -50,8 +51,10 @@ export class AlbumController {
     async getAlbunsByUserId (req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
+            const hashtag = req.body.hashtag as string
+            const orderDate = req.body.orderDate as string
 
-            const response = await AlbumController.albumBusiness.getAlbunsByUserId(token)
+            const response = await AlbumController.albumBusiness.getAlbunsByUserId(token, hashtag, orderDate)
 
             res.status(200).send({Albuns: response})
         } catch (error) {

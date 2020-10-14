@@ -40,7 +40,8 @@ class AlbumController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.headers.authorization;
-                const response = yield AlbumController.albumBusiness.getAllAlbuns(token);
+                const user_id = req.body.user_id;
+                const response = yield AlbumController.albumBusiness.getAllAlbuns(token, user_id);
                 res.status(200).send({ Albuns: response });
             }
             catch (error) {
@@ -55,7 +56,8 @@ class AlbumController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.headers.authorization;
-                const response = yield AlbumController.albumBusiness.getAlbunsByUserId(token);
+                const hashtag = req.body.hashtag;
+                const response = yield AlbumController.albumBusiness.getAlbunsByUserId(token, hashtag);
                 res.status(200).send({ Albuns: response });
             }
             catch (error) {

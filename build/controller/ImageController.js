@@ -52,6 +52,22 @@ class ImageController {
             }
         });
     }
+    getImageById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const token = req.headers.authorization;
+                const response = yield ImageController.imageBusiness.getImageById(id, token);
+                res.status(200).send(response);
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
+        });
+    }
 }
 exports.ImageController = ImageController;
 ImageController.imageBusiness = new ImageBusiness_1.ImageBusiness(new ImageDatabase_1.ImageDatabase(), new IdGenerator_1.IdGenerator(), new Authenticator_1.Authenticator());
