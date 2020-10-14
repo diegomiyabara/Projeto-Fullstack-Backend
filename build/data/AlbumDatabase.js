@@ -41,16 +41,21 @@ class AlbumDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
-    getAllAlbuns() {
+    getAllAlbuns(userId) {
         const _super = Object.create(null, {
             getConnection: { get: () => super.getConnection }
         });
         return __awaiter(this, void 0, void 0, function* () {
+            let idQuery = "";
+            if (userId) {
+                idQuery = `WHERE user_id = "${userId}"`;
+            }
             try {
                 const response = yield _super.getConnection.call(this)
                     .raw(`SELECT ${this.tableName}.id, ${this.tableName}.name, description, albumImageUrl, user_id, PROJETO_FULLSTACK_USERS.name as user_name 
             FROM PROJETO_FULLSTACK_USERS
-            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id;`);
+            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id
+            ${idQuery};`);
                 return response[0];
             }
             catch (error) {
@@ -58,17 +63,23 @@ class AlbumDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
-    getAlbunsByUserId(user_id) {
+    getAlbunsByUserId(user_id, albumName) {
         const _super = Object.create(null, {
             getConnection: { get: () => super.getConnection }
         });
         return __awaiter(this, void 0, void 0, function* () {
+            let nameQuery = "";
+            if (!albumName) {
+                nameQuery = `AND name LIKE '%${albumName}%'`;
+            }
             try {
                 const response = yield _super.getConnection.call(this)
-                    .select("*")
-                    .from(this.tableName)
-                    .where("user_id", user_id);
-                return response;
+                    .raw(`
+                SELECT * FROM ${this.tableName}
+                WHERE user_id = ${user_id}
+                ${nameQuery};
+            `);
+                return response[0];
             }
             catch (error) {
                 throw new Error(error.sqlMessage || error.message);

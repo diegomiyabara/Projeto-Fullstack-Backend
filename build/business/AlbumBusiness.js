@@ -38,20 +38,20 @@ class AlbumBusiness {
             return yield this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id);
         });
     }
-    getAllAlbuns(token) {
+    getAllAlbuns(token, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = this.authenticator.getData(token);
             if (user.role !== "ADMIN") {
                 throw new InsuficientAuth_1.InsuficientAuth("Only Admins can acess all albuns");
             }
-            const response = yield this.albumDatabase.getAllAlbuns();
+            const response = yield this.albumDatabase.getAllAlbuns(user_id);
             return response;
         });
     }
-    getAlbunsByUserId(token) {
+    getAlbunsByUserId(token, hashtag) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = this.authenticator.getData(token);
-            const response = yield this.albumDatabase.getAlbunsByUserId(user.id);
+            const response = yield this.albumDatabase.getAlbunsByUserId(user.id, hashtag);
             return response;
         });
     }

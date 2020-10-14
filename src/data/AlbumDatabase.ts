@@ -11,7 +11,8 @@ export class AlbumDatabase extends BaseDatabase {
         name: string,
         description: string,
         albumImageUrl: string,
-        user_id: string
+        user_id: string,
+        createdAt: string
     ): Promise<void> {
         try {
         await super.getConnection()
@@ -20,7 +21,8 @@ export class AlbumDatabase extends BaseDatabase {
             name,
             description,
             albumImageUrl,
-            user_id
+            user_id,
+            createdAt
             })
             .into(this.tableName);
         } catch (error) {
@@ -31,12 +33,17 @@ export class AlbumDatabase extends BaseDatabase {
         }
     }
 
-    public async getAllAlbuns() :Promise <AlbumOutputDTO[]> {
+    public async getAllAlbuns(userId?: string) :Promise <AlbumOutputDTO[]> {
+        let idQuery = ""
+        if(userId) {
+            idQuery = `WHERE user_id = "${userId}"`
+        }
         try {
             const response = await super.getConnection()
             .raw(`SELECT ${this.tableName}.id, ${this.tableName}.name, description, albumImageUrl, user_id, PROJETO_FULLSTACK_USERS.name as user_name 
             FROM PROJETO_FULLSTACK_USERS
-            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id;`)
+            JOIN ${this.tableName} ON PROJETO_FULLSTACK_USERS.id = ${this.tableName}.user_id
+            ${idQuery};`)
 
             return response[0]
         } catch (error) {
@@ -44,14 +51,25 @@ export class AlbumDatabase extends BaseDatabase {
         }
     }
 
-    public async getAlbunsByUserId(user_id: string): Promise<AlbumOutputDTO[]> {
+    public async getAlbunsByUserId(user_id: string, albumName?: string, albumDate?: string): Promise<AlbumOutputDTO[]> {
+        let nameQuery = ""
+        let dateQuery = ""
+        if(albumName) {
+            nameQuery = `AND name LIKE '%${albumName}%'`
+        } 
+        if(albumDate) {
+            dateQuery = `ORDER BY createdAt ${albumDate}`
+        }
         try {
             const response = await super.getConnection()
-            .select("*")
-            .from(this.tableName)
-            .where("user_id", user_id)
+            .raw(`
+                SELECT * FROM ${this.tableName}
+                WHERE user_id = "${user_id}"
+                ${nameQuery}
+                ${dateQuery};
+            `)
 
-            return response
+            return response[0]
         } catch (error) {
             throw new Error(error.sqlMessage || error.message);
         }

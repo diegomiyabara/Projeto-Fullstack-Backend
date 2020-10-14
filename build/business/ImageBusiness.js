@@ -50,6 +50,19 @@ class ImageBusiness {
             return response;
         });
     }
+    getImageById(id, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!id) {
+                throw new InvalidParameterError_1.InvalidParameterError("Image id is required");
+            }
+            const user = this.authenticator.getData(token);
+            const response = yield this.imageDatabase.getImageById(id);
+            if (response.user_id !== user.id) {
+                throw new InsuficientAuth_1.InsuficientAuth("You can only acess your own images");
+            }
+            return response;
+        });
+    }
 }
 exports.ImageBusiness = ImageBusiness;
 //# sourceMappingURL=ImageBusiness.js.map

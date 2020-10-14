@@ -51,6 +51,20 @@ class ImageDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
+    getImageById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.getConnection()
+                    .select("*")
+                    .from(this.tableName)
+                    .where("id", id);
+                return response[0];
+            }
+            catch (error) {
+                throw new Error(error.sqlMessage || error.message);
+            }
+        });
+    }
 }
 exports.ImageDatabase = ImageDatabase;
 //# sourceMappingURL=ImageDatabase.js.map
