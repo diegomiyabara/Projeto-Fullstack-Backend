@@ -36,9 +36,11 @@ export class ImageController {
     async getAlbumImages(req: Request, res: Response) {
         try {
             const album_id = req.query.albumId as string
+            const hashtag = req.body.hashtag as string
+            const orderDate = req.body.orderDate as string
             const token = req.headers.authorization as string
 
-            const response = await ImageController.imageBusiness.getAlbumImages(album_id, token)
+            const response = await ImageController.imageBusiness.getAlbumImages(album_id, hashtag, orderDate, token)
 
             res.status(200).send({Images: response})
         } catch (error) {

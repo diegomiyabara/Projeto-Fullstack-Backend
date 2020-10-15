@@ -7,6 +7,7 @@ import { AlbumDatabase } from "../data/AlbumDatabase";
 import { AlbumOutputDTO } from "../model/Album";
 import { InsuficientAuth } from "../error/InsuficientAuth";
 import { NotFoundError } from "../error/NotFoundError";
+import dayjs from "dayjs";
 
 export class ImageBusiness {
 
@@ -21,6 +22,8 @@ export class ImageBusiness {
             throw new InvalidParameterError("All inputs must be filled!")
         }
 
+        const today = dayjs().format("YYYY-MM-DD")
+
         const id = this.idGenerator.generate();
 
         const user = this.authenticator.getData(token)
@@ -32,19 +35,23 @@ export class ImageBusiness {
             throw new InsuficientAuth("You can only add images to your albuns!")
         }
 
-        await this.imageDatabase.addImage(id, image.description, image.photoUrl, user.id, image.album_id);
+        await this.imageDatabase.addImage(id, image.description, image.photoUrl, user.id, image.album_id, today);
 
         return album
     }
 
-    async getAlbumImages(album_id: string, token: string): Promise<ImageOutputDTO[]> {
+    async getAlbumImages(album_id: string, hashtag: string, orderDate: string, token: string): Promise<ImageOutputDTO[]> {
         if (!album_id) {
             throw new InvalidParameterError("Album id is required.")
         }
 
+        if(orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+            throw new InvalidParameterError("orderDate must be ASC or DESC")
+        }
+
         const user = this.authenticator.getData(token)
 
-        const response = await this.imageDatabase.getAlbumImages(album_id)
+        const response = await this.imageDatabase.getAlbumImages(album_id, hashtag, orderDate)
 
         response.map((image) => {
             if(image.user_id !== user.id) {
