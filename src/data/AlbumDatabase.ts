@@ -53,7 +53,7 @@ export class AlbumDatabase extends BaseDatabase {
 
     public async getAlbunsByUserId(user_id: string, albumName?: string, albumDate?: string): Promise<AlbumOutputDTO[]> {
         let nameQuery = ""
-        let dateQuery = ""
+        let dateQuery = "ORDER BY createdAt DESC"
         if(albumName) {
             nameQuery = `AND name LIKE '%${albumName}%'`
         } 
