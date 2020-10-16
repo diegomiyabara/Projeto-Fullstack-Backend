@@ -11,7 +11,8 @@ export class ImageDatabase extends BaseDatabase {
         description: string,
         photoUrl: string,
         user_id: string,
-        album_id: string
+        album_id: string,
+        createdAt: string
     ): Promise<void> {
         try {
         await super.getConnection()
@@ -20,7 +21,8 @@ export class ImageDatabase extends BaseDatabase {
             description,
             photoUrl,
             user_id,
-            album_id
+            album_id,
+            createdAt
             })
             .into(this.tableName);
         } catch (error) {
@@ -28,14 +30,25 @@ export class ImageDatabase extends BaseDatabase {
         }
     }
 
-    public async getAlbumImages(album_id: string): Promise<ImageOutputDTO[]> {
+    public async getAlbumImages(album_id: string, hashtag: string, orderDate: string): Promise<ImageOutputDTO[]> {
+        let hashQuery = ""
+        let dateQuery = ""
+        if(hashtag) {
+            hashQuery = `AND description LIKE '%${hashtag}%'`
+        }
+        if(orderDate) {
+            dateQuery = `ORDER BY createdAt ${orderDate}`
+        }
         try {
             const response = await this.getConnection()
-            .select("*")
-            .from(this.tableName)
-            .where("album_id", album_id)
+            .raw(`
+                SELECT * FROM ${this.tableName}
+                WHERE album_id = "${album_id}"
+                ${hashQuery}
+                ${dateQuery};
+            `)
 
-            return response
+            return response[0]
         } catch (error) {
             throw new Error(error.sqlMessage || error.message);
         }
