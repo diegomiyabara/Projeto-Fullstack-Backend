@@ -51,8 +51,8 @@ export class AlbumController {
     async getAlbunsByUserId (req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
-            const hashtag = req.body.hashtag as string
-            const orderDate = req.body.orderDate as string
+            const hashtag = req.query.hashtag as string
+            const orderDate = req.query.orderDate as string
 
             const response = await AlbumController.albumBusiness.getAlbunsByUserId(token, hashtag, orderDate)
 
