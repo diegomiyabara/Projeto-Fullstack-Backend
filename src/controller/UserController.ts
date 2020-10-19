@@ -55,4 +55,64 @@ export class UserController {
         await BaseDatabase.destroyConnection();
     }
 
+    async getUsers(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const hashtag = req.query.name as string
+
+            const users = await UserController.userBusiness.getUsers(token, hashtag)
+
+            res.status(200).send({Users: users})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            await BaseDatabase.destroyConnection()
+        }
+    }
+
+    async followUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const user_to_follow_id = req.body.user_to_follow_id as string
+
+            const followed = await UserController.userBusiness.followUser(token, user_to_follow_id)
+
+            res.status(200).send({message: `Você está seguindo agora ${followed.name}!`})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
+
+    async unfollowUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const user_to_unfollow_id = req.body.user_to_unfollow_id as string
+
+            const followed = await UserController.userBusiness.unfollowUser(token, user_to_unfollow_id)
+
+            res.status(200).send({message: `Você deixou de seguir ${followed.name}!`})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
+
+    async getFeed(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const hashtag = req.query.name as string
+            const orderDate = req.query.orderBy as string
+            
+            const feed = await UserController.userBusiness.getFeed(token, hashtag, orderDate)
+
+            res.status(200).send({Feed: feed})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
 }

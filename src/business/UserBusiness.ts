@@ -1,4 +1,4 @@
-import { UserInputDTO, LoginInputDTO, User, UserRole } from "../model/User";
+import { UserInputDTO, LoginInputDTO, User, UserRole, UserOutputDTO } from "../model/User";
 import { UserDatabase } from "../data/UserDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { HashManager } from "../services/HashManager";
@@ -75,5 +75,66 @@ export class UserBusiness {
         }
 
         return accessToken;
+    }
+
+    async getUsers(token: string, hashtag: string): Promise<UserOutputDTO[]> {
+        const user = this.authenticator.getData(token)
+
+        if(!hashtag) {
+            hashtag = ""
+        }
+
+        const users = await this.userDatabase.getAllUsers(user.id, hashtag)
+
+        const formatUsers = users.map((user) => {
+            return {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                nickname: user.nickname
+            }
+        })
+        
+        return formatUsers
+    }
+
+    async followUser(token: string, user_to_follow_id: string): Promise<UserOutputDTO> {
+        const user = this.authenticator.getData(token)
+
+        if(!user_to_follow_id){
+            throw new NotFoundError("Please inform the user to follow id.")
+        }
+
+        const friend = await this.userDatabase.getUserById(user_to_follow_id)
+
+        await this.userDatabase.followUser(user.id, user_to_follow_id)
+
+        return friend
+    }
+
+    async unfollowUser(token: string, user_to_unfollow_id: string): Promise<UserOutputDTO> {
+        const user = this.authenticator.getData(token)
+
+        if(!user_to_unfollow_id){
+            throw new NotFoundError("Please inform the user to unfollow id.")
+        }
+
+        const friend = await this.userDatabase.getUserById(user_to_unfollow_id)
+
+        await this.userDatabase.unfollowUser(user.id, user_to_unfollow_id)
+
+        return friend
+    }
+
+    async getFeed(token: string, hashtag: string, orderDate: string): Promise<any[]> {
+        const user = this.authenticator.getData(token)
+
+        if(orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+            throw new InvalidParameterError("The query orderBy must be ASC or DESC")
+        }
+
+        const feed = await this.userDatabase.getFeed(user.id, hashtag, orderDate)
+
+        return feed
     }
 }
