@@ -70,4 +70,18 @@ export class UserController {
         }
     }
 
+    async followUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const user_to_follow_id = req.body.user_to_follow_id as string
+
+            const followed = await UserController.userBusiness.followUser(token, user_to_follow_id)
+
+            res.status(200).send({message: `Você está seguindo agora ${followed.name}!`})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
 }

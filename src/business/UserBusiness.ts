@@ -97,4 +97,18 @@ export class UserBusiness {
         
         return formatUsers
     }
+
+    async followUser(token: string, user_to_follow_id: string): Promise<UserOutputDTO> {
+        const user = this.authenticator.getData(token)
+
+        if(!user_to_follow_id){
+            throw new NotFoundError("Please inform the user to follow id.")
+        }
+
+        const friend = await this.userDatabase.getUserById(user_to_follow_id)
+
+        await this.userDatabase.followUser(user.id, user_to_follow_id)
+
+        return friend
+    }
 }

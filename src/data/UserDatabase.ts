@@ -5,6 +5,7 @@ import { InvalidParameterError } from "../error/InvalidParameterError";
 export class UserDatabase extends BaseDatabase {
 
   protected tableName: string = "PROJETO_FULLSTACK_USERS";
+  protected relationsTableName: string = "PROJETO_FULLSTACK_USER_RELATION"
 
   private toModel(dbModel?: any): User | undefined {
     return (
@@ -60,6 +61,15 @@ export class UserDatabase extends BaseDatabase {
     return this.toModel(result[0][0]);
   }
 
+  public async getUserById(id: string): Promise<UserOutputDTO> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(this.tableName)
+    .where('id', id)
+
+    return result[0]
+  }
+
   public async getAllUsers(user_id: string, hashtag: string): Promise<UserOutputDTO[]> {    
     const result = await super.getConnection()
     .select("*")
@@ -71,5 +81,28 @@ export class UserDatabase extends BaseDatabase {
     })
 
     return result
+  }
+
+  public async followUser(user_id: string, user_to_follow_id: string): Promise<void> {
+    try {
+        await super.getConnection()
+        .insert({
+          user_id,
+          user_to_follow_id
+        })
+        .into(this.relationsTableName)
+    } catch (error) {
+      throw new Error("You are already following this user.")
+    }
+  }
+
+  public async unfollowUser(user_id: string, user_to_follow_id: string): Promise<void> {
+    try {
+      await super.getConnection()
+      .delete("*")
+      .where({user_id, user_to_follow_id})
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 }
