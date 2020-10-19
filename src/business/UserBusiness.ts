@@ -111,4 +111,18 @@ export class UserBusiness {
 
         return friend
     }
+
+    async unfollowUser(token: string, user_to_unfollow_id: string): Promise<UserOutputDTO> {
+        const user = this.authenticator.getData(token)
+
+        if(!user_to_unfollow_id){
+            throw new NotFoundError("Please inform the user to unfollow id.")
+        }
+
+        const friend = await this.userDatabase.getUserById(user_to_unfollow_id)
+
+        await this.userDatabase.unfollowUser(user.id, user_to_unfollow_id)
+
+        return friend
+    }
 }

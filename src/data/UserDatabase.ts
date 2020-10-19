@@ -100,6 +100,7 @@ export class UserDatabase extends BaseDatabase {
     try {
       await super.getConnection()
       .delete("*")
+      .from(this.relationsTableName)
       .where({user_id, user_to_follow_id})
     } catch (error) {
       throw new Error(error.message)

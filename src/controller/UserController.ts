@@ -84,4 +84,19 @@ export class UserController {
             BaseDatabase.destroyConnection()
         }
     }
+
+    async unfollowUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const user_to_unfollow_id = req.body.user_to_unfollow_id as string
+
+            const followed = await UserController.userBusiness.unfollowUser(token, user_to_unfollow_id)
+
+            res.status(200).send({message: `Você deixou de seguir ${followed.name}!`})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
 }
