@@ -77,10 +77,14 @@ export class UserBusiness {
         return accessToken;
     }
 
-    async getUsers(token: string): Promise<UserOutputDTO[]> {
+    async getUsers(token: string, hashtag: string): Promise<UserOutputDTO[]> {
         const user = this.authenticator.getData(token)
 
-        const users = await this.userDatabase.getAllUsers(user.id)
+        if(!hashtag) {
+            hashtag = ""
+        }
+
+        const users = await this.userDatabase.getAllUsers(user.id, hashtag)
 
         const formatUsers = users.map((user) => {
             return {

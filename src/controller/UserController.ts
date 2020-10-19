@@ -58,8 +58,9 @@ export class UserController {
     async getUsers(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
+            const hashtag = req.query.name as string
 
-            const users = await UserController.userBusiness.getUsers(token)
+            const users = await UserController.userBusiness.getUsers(token, hashtag)
 
             res.status(200).send({Users: users})
         } catch (error) {

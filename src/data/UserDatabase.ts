@@ -60,10 +60,11 @@ export class UserDatabase extends BaseDatabase {
     return this.toModel(result[0][0]);
   }
 
-  public async getAllUsers(user_id: string): Promise<UserOutputDTO[]> {
+  public async getAllUsers(user_id: string, hashtag: string): Promise<UserOutputDTO[]> {    
     const result = await super.getConnection()
     .select("*")
     .from(this.tableName)
+    .where('name', 'like', `%${hashtag}%`)
     .whereNot({
       id: user_id,
       role: "ADMIN"
