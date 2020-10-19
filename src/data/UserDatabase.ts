@@ -6,6 +6,7 @@ export class UserDatabase extends BaseDatabase {
 
   protected tableName: string = "PROJETO_FULLSTACK_USERS";
   protected relationsTableName: string = "PROJETO_FULLSTACK_USER_RELATION"
+  protected albumTableName: string = "PROJETO_FULLSTACK_ALBUNS"
 
   private toModel(dbModel?: any): User | undefined {
     return (
@@ -102,6 +103,33 @@ export class UserDatabase extends BaseDatabase {
       .delete("*")
       .from(this.relationsTableName)
       .where({user_id, user_to_follow_id})
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  public async getFeed(user_id: string, hashtag: string, orderDate: string): Promise<any[]> {
+    let hashQuery = ""
+    if(hashtag) {
+      hashQuery = `AND ${this.albumTableName}.name LIKE "%${hashtag}%"`
+    }
+    let dateQuery = `ORDER BY ${this.albumTableName}.createdAt DESC`
+    if(orderDate === "ASC"){
+      dateQuery = `ORDER BY ${this.albumTableName}.createdAt ASC`
+    }
+    try {
+      const response = await super.getConnection()
+      .raw(`
+      SELECT ${this.tableName}.id, ${this.tableName}.name, ${this.tableName}.nickname, ${this.albumTableName}.id as album_id, ${this.albumTableName}.name as album_name, ${this.albumTableName}.description as album_description, ${this.albumTableName}.albumImageUrl as album_imageUrl,
+      ${this.albumTableName}.createdAt as album_createdAt
+      FROM ${this.tableName}
+      JOIN ${this.albumTableName} on ${this.tableName}.id = ${this.albumTableName}.user_id
+      JOIN ${this.relationsTableName} on ${this.albumTableName}.user_id = ${this.relationsTableName}.user_to_follow_id
+      WHERE ${this.relationsTableName}.user_id = "${user_id}" ${hashQuery}
+      ${dateQuery};
+      `)
+
+      return response[0]
     } catch (error) {
       throw new Error(error.message)
     }

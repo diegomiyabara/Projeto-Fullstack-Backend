@@ -125,4 +125,16 @@ export class UserBusiness {
 
         return friend
     }
+
+    async getFeed(token: string, hashtag: string, orderDate: string): Promise<any[]> {
+        const user = this.authenticator.getData(token)
+
+        if(orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+            throw new InvalidParameterError("The query orderBy must be ASC or DESC")
+        }
+
+        const feed = await this.userDatabase.getFeed(user.id, hashtag, orderDate)
+
+        return feed
+    }
 }

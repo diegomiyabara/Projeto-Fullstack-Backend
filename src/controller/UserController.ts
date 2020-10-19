@@ -99,4 +99,20 @@ export class UserController {
             BaseDatabase.destroyConnection()
         }
     }
+
+    async getFeed(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+            const hashtag = req.query.name as string
+            const orderDate = req.query.orderBy as string
+            
+            const feed = await UserController.userBusiness.getFeed(token, hashtag, orderDate)
+
+            res.status(200).send({Feed: feed})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
 }
