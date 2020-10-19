@@ -42,11 +42,7 @@ export class AlbumBusiness {
     }
 
     async getAllAlbuns(token: string, user_id: string): Promise<AlbumOutputDTO[]> {
-        const user = this.authenticator.getData(token)
-
-        if(user.role !== "ADMIN") {
-            throw new InsuficientAuth("Only Admins can acess all albuns")
-        }
+        this.authenticator.getData(token)
 
         const response = await this.albumDatabase.getAllAlbuns(user_id)
 

@@ -1,4 +1,4 @@
-import { UserInputDTO, LoginInputDTO, User, UserRole } from "../model/User";
+import { UserInputDTO, LoginInputDTO, User, UserRole, UserOutputDTO } from "../model/User";
 import { UserDatabase } from "../data/UserDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { HashManager } from "../services/HashManager";
@@ -75,5 +75,22 @@ export class UserBusiness {
         }
 
         return accessToken;
+    }
+
+    async getUsers(token: string): Promise<UserOutputDTO[]> {
+        const user = this.authenticator.getData(token)
+
+        const users = await this.userDatabase.getAllUsers(user.id)
+
+        const formatUsers = users.map((user) => {
+            return {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                nickname: user.nickname
+            }
+        })
+        
+        return formatUsers
     }
 }

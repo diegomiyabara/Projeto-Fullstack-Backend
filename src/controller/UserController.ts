@@ -55,4 +55,18 @@ export class UserController {
         await BaseDatabase.destroyConnection();
     }
 
+    async getUsers(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const users = await UserController.userBusiness.getUsers(token)
+
+            res.status(200).send({Users: users})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            await BaseDatabase.destroyConnection()
+        }
+    }
+
 }

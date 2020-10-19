@@ -88,6 +88,13 @@ export interface LoginInputDTO{
     password: string;
 }
 
+export interface UserOutputDTO {
+    id: string,
+    name: string,
+    email: string,
+    nickname: string
+}
+
 export enum UserRole{
     NORMAL = "NORMAL",
     ADMIN = "ADMIN"

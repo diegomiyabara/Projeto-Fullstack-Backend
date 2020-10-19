@@ -1,5 +1,5 @@
 import { BaseDatabase } from "./BaseDatabase";
-import { User } from "../model/User";
+import { User, UserOutputDTO } from "../model/User";
 import { InvalidParameterError } from "../error/InvalidParameterError";
 
 export class UserDatabase extends BaseDatabase {
@@ -58,5 +58,17 @@ export class UserDatabase extends BaseDatabase {
       `)
 
     return this.toModel(result[0][0]);
+  }
+
+  public async getAllUsers(user_id: string): Promise<UserOutputDTO[]> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(this.tableName)
+    .whereNot({
+      id: user_id,
+      role: "ADMIN"
+    })
+
+    return result
   }
 }
