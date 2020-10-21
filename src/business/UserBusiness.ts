@@ -126,6 +126,14 @@ export class UserBusiness {
         return friend
     }
 
+    async getFriends(token: string): Promise<any[]> {
+        const user = this.authenticator.getData(token)
+
+        const response = this.userDatabase.getFriends(user.id)
+
+        return response
+    }
+
     async getFeed(token: string, hashtag: string, orderDate: string): Promise<any[]> {
         const user = this.authenticator.getData(token)
 

@@ -108,6 +108,19 @@ export class UserDatabase extends BaseDatabase {
     }
   }
 
+  public async getFriends(user_id: string): Promise<any[]> {
+    try {
+      const response = await super.getConnection()
+      .select("*")
+      .from(this.relationsTableName)
+      .where('user_id', user_id)
+
+      return response
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
   public async getFeed(user_id: string, hashtag: string, orderDate: string): Promise<any[]> {
     let hashQuery = ""
     if(hashtag) {
