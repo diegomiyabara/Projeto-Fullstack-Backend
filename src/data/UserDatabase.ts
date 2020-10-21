@@ -77,8 +77,7 @@ export class UserDatabase extends BaseDatabase {
     .from(this.tableName)
     .where('name', 'like', `%${hashtag}%`)
     .whereNot({
-      id: user_id,
-      role: "ADMIN"
+      id: user_id
     })
 
     return result
