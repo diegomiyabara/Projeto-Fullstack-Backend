@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserInputDTO, LoginInputDTO} from "../model/User";
+import { UserInputDTO, LoginInputDTO, User} from "../model/User";
 import { UserBusiness } from "../business/UserBusiness";
 import { BaseDatabase } from "../data/BaseDatabase";
 import { UserDatabase } from "../data/UserDatabase";
@@ -93,6 +93,20 @@ export class UserController {
             const followed = await UserController.userBusiness.unfollowUser(token, user_to_unfollow_id)
 
             res.status(200).send({message: `Você deixou de seguir ${followed.name}!`})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        } finally {
+            BaseDatabase.destroyConnection()
+        }
+    }
+
+    async getFriends(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const friends = await UserController.userBusiness.getFriends(token)
+
+            res.status(200).send({Friends: friends})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
         } finally {
