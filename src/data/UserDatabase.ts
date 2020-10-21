@@ -111,11 +111,13 @@ export class UserDatabase extends BaseDatabase {
   public async getFriends(user_id: string): Promise<any[]> {
     try {
       const response = await super.getConnection()
-      .select("*")
-      .from(this.relationsTableName)
-      .where('user_id', user_id)
+      .raw(`
+        SELECT user_id, user_to_follow_id as friend_id
+        FROM ${this.relationsTableName}
+        WHERE user_id = "${user_id}"
+      `)
 
-      return response
+      return response[0]
     } catch (error) {
       throw new Error(error.message)
     }
