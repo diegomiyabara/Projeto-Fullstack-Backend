@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AlbumBusiness = void 0;
 const InvalidParameterError_1 = require("../error/InvalidParameterError");
 const NotFoundError_1 = require("../error/NotFoundError");
 const InsuficientAuth_1 = require("../error/InsuficientAuth");
+const dayjs_1 = __importDefault(require("dayjs"));
 class AlbumBusiness {
     constructor(albumDatabase, idGenerator, authenticator) {
         this.albumDatabase = albumDatabase;
@@ -27,6 +31,7 @@ class AlbumBusiness {
             if (!album.albumImageUrl) {
                 album.albumImageUrl = "";
             }
+            const today = dayjs_1.default().format("YYYY-MM-DD");
             const id = this.idGenerator.generate();
             const user = this.authenticator.getData(token);
             const albunsDb = yield this.albumDatabase.getAlbunsByUserId(user.id);
@@ -35,23 +40,23 @@ class AlbumBusiness {
                     throw new InvalidParameterError_1.InvalidParameterError(`You already have an album with the name ${album.name}.`);
                 }
             });
-            return yield this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id);
+            return yield this.albumDatabase.createAlbum(id, album.name, album.description, album.albumImageUrl, user.id, today);
         });
     }
     getAllAlbuns(token, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = this.authenticator.getData(token);
-            if (user.role !== "ADMIN") {
-                throw new InsuficientAuth_1.InsuficientAuth("Only Admins can acess all albuns");
-            }
+            this.authenticator.getData(token);
             const response = yield this.albumDatabase.getAllAlbuns(user_id);
             return response;
         });
     }
-    getAlbunsByUserId(token, hashtag) {
+    getAlbunsByUserId(token, hashtag, orderDate) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = this.authenticator.getData(token);
-            const response = yield this.albumDatabase.getAlbunsByUserId(user.id, hashtag);
+            if (orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+                throw new InvalidParameterError_1.InvalidParameterError("orderDate must be ASC or DESC");
+            }
+            const response = yield this.albumDatabase.getAlbunsByUserId(user.id, hashtag, orderDate);
             return response;
         });
     }

@@ -25,7 +25,8 @@ class UserController {
                     email: req.body.email,
                     nickname: req.body.nickname,
                     password: req.body.password,
-                    role: req.body.role
+                    role: req.body.role,
+                    photoUrl: req.body.photoUrl
                 };
                 const token = yield UserController.userBusiness.createUser(input);
                 res.status(200).send({ message: "User created sucessfully!", token });
@@ -50,6 +51,86 @@ class UserController {
                 res.status(error.code || 400).send({ message: error.message });
             }
             yield BaseDatabase_1.BaseDatabase.destroyConnection();
+        });
+    }
+    getUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const hashtag = req.query.name;
+                const users = yield UserController.userBusiness.getUsers(token, hashtag);
+                res.status(200).send({ Users: users });
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                yield BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
+        });
+    }
+    followUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const user_to_follow_id = req.body.user_to_follow_id;
+                const followed = yield UserController.userBusiness.followUser(token, user_to_follow_id);
+                res.status(200).send({ message: `Você está seguindo agora ${followed.name}!` });
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
+        });
+    }
+    unfollowUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const user_to_unfollow_id = req.body.user_to_unfollow_id;
+                const followed = yield UserController.userBusiness.unfollowUser(token, user_to_unfollow_id);
+                res.status(200).send({ message: `Você deixou de seguir ${followed.name}!` });
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
+        });
+    }
+    getFriends(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const friends = yield UserController.userBusiness.getFriends(token);
+                res.status(200).send({ Friends: friends });
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
+        });
+    }
+    getFeed(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const hashtag = req.query.name;
+                const orderDate = req.query.orderBy;
+                const feed = yield UserController.userBusiness.getFeed(token, hashtag, orderDate);
+                res.status(200).send({ Feed: feed });
+            }
+            catch (error) {
+                res.status(error.code || 400).send({ message: error.message });
+            }
+            finally {
+                BaseDatabase_1.BaseDatabase.destroyConnection();
+            }
         });
     }
 }

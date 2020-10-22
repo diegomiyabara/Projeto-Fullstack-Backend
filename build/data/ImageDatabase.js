@@ -16,7 +16,7 @@ class ImageDatabase extends BaseDatabase_1.BaseDatabase {
         super(...arguments);
         this.tableName = "PROJETO_FULLSTACK_IMAGES";
     }
-    addImage(id, description, photoUrl, user_id, album_id) {
+    addImage(id, description, photoUrl, user_id, album_id, createdAt) {
         const _super = Object.create(null, {
             getConnection: { get: () => super.getConnection }
         });
@@ -28,7 +28,8 @@ class ImageDatabase extends BaseDatabase_1.BaseDatabase {
                     description,
                     photoUrl,
                     user_id,
-                    album_id
+                    album_id,
+                    createdAt
                 })
                     .into(this.tableName);
             }
@@ -37,14 +38,25 @@ class ImageDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
-    getAlbumImages(album_id) {
+    getAlbumImages(album_id, hashtag, orderDate) {
         return __awaiter(this, void 0, void 0, function* () {
+            let hashQuery = "";
+            let dateQuery = "";
+            if (hashtag) {
+                hashQuery = `AND description LIKE '%${hashtag}%'`;
+            }
+            if (orderDate) {
+                dateQuery = `ORDER BY createdAt ${orderDate}`;
+            }
             try {
                 const response = yield this.getConnection()
-                    .select("*")
-                    .from(this.tableName)
-                    .where("album_id", album_id);
-                return response;
+                    .raw(`
+                SELECT * FROM ${this.tableName}
+                WHERE album_id = "${album_id}"
+                ${hashQuery}
+                ${dateQuery};
+            `);
+                return response[0];
             }
             catch (error) {
                 throw new Error(error.sqlMessage || error.message);

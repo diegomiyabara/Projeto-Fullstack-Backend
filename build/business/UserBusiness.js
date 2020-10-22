@@ -42,7 +42,7 @@ class UserBusiness {
             }
             const id = this.idGenerator.generate();
             const hashPassword = yield this.hashManager.hash(user.password);
-            yield this.userDatabase.createUser(id, user.name, user.email, user.nickname, hashPassword, user.role);
+            yield this.userDatabase.createUser(id, user.name, user.email, user.nickname, hashPassword, user.role, user.photoUrl);
             const accessToken = this.authenticator.generateToken({ id, name: user.name, role: user.role });
             return accessToken;
         });
@@ -65,6 +65,64 @@ class UserBusiness {
                 throw new Error("Invalid Password!");
             }
             return accessToken;
+        });
+    }
+    getUsers(token, hashtag) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this.authenticator.getData(token);
+            if (!hashtag) {
+                hashtag = "";
+            }
+            const users = yield this.userDatabase.getAllUsers(user.id, hashtag);
+            const formatUsers = users.map((user) => {
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    nickname: user.nickname,
+                    photoUrl: user.photoUrl
+                };
+            });
+            return formatUsers;
+        });
+    }
+    followUser(token, user_to_follow_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this.authenticator.getData(token);
+            if (!user_to_follow_id) {
+                throw new NotFoundError_1.NotFoundError("Please inform the user to follow id.");
+            }
+            const friend = yield this.userDatabase.getUserById(user_to_follow_id);
+            yield this.userDatabase.followUser(user.id, user_to_follow_id);
+            return friend;
+        });
+    }
+    unfollowUser(token, user_to_unfollow_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this.authenticator.getData(token);
+            if (!user_to_unfollow_id) {
+                throw new NotFoundError_1.NotFoundError("Please inform the user to unfollow id.");
+            }
+            const friend = yield this.userDatabase.getUserById(user_to_unfollow_id);
+            yield this.userDatabase.unfollowUser(user.id, user_to_unfollow_id);
+            return friend;
+        });
+    }
+    getFriends(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this.authenticator.getData(token);
+            const response = this.userDatabase.getFriends(user.id);
+            return response;
+        });
+    }
+    getFeed(token, hashtag, orderDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this.authenticator.getData(token);
+            if (orderDate !== "ASC" && orderDate !== "DESC" && orderDate) {
+                throw new InvalidParameterError_1.InvalidParameterError("The query orderBy must be ASC or DESC");
+            }
+            const feed = yield this.userDatabase.getFeed(user.id, hashtag, orderDate);
+            return feed;
         });
     }
 }

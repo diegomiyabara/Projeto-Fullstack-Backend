@@ -40,8 +40,10 @@ class ImageController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const album_id = req.query.albumId;
+                const hashtag = req.query.hashtag;
+                const orderDate = req.query.orderDate;
                 const token = req.headers.authorization;
-                const response = yield ImageController.imageBusiness.getAlbumImages(album_id, token);
+                const response = yield ImageController.imageBusiness.getAlbumImages(album_id, hashtag, orderDate, token);
                 res.status(200).send({ Images: response });
             }
             catch (error) {

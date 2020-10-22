@@ -17,7 +17,7 @@ class AlbumDatabase extends BaseDatabase_1.BaseDatabase {
         super(...arguments);
         this.tableName = "PROJETO_FULLSTACK_ALBUNS";
     }
-    createAlbum(id, name, description, albumImageUrl, user_id) {
+    createAlbum(id, name, description, albumImageUrl, user_id, createdAt) {
         const _super = Object.create(null, {
             getConnection: { get: () => super.getConnection }
         });
@@ -29,7 +29,8 @@ class AlbumDatabase extends BaseDatabase_1.BaseDatabase {
                     name,
                     description,
                     albumImageUrl,
-                    user_id
+                    user_id,
+                    createdAt
                 })
                     .into(this.tableName);
             }
@@ -63,21 +64,26 @@ class AlbumDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
-    getAlbunsByUserId(user_id, albumName) {
+    getAlbunsByUserId(user_id, albumName, albumDate) {
         const _super = Object.create(null, {
             getConnection: { get: () => super.getConnection }
         });
         return __awaiter(this, void 0, void 0, function* () {
             let nameQuery = "";
-            if (!albumName) {
+            let dateQuery = "ORDER BY createdAt DESC";
+            if (albumName) {
                 nameQuery = `AND name LIKE '%${albumName}%'`;
+            }
+            if (albumDate) {
+                dateQuery = `ORDER BY createdAt ${albumDate}`;
             }
             try {
                 const response = yield _super.getConnection.call(this)
                     .raw(`
                 SELECT * FROM ${this.tableName}
-                WHERE user_id = ${user_id}
-                ${nameQuery};
+                WHERE user_id = "${user_id}"
+                ${nameQuery}
+                ${dateQuery};
             `);
                 return response[0];
             }
