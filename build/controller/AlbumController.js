@@ -56,8 +56,9 @@ class AlbumController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const token = req.headers.authorization;
-                const hashtag = req.body.hashtag;
-                const response = yield AlbumController.albumBusiness.getAlbunsByUserId(token, hashtag);
+                const hashtag = req.query.hashtag;
+                const orderDate = req.query.orderDate;
+                const response = yield AlbumController.albumBusiness.getAlbunsByUserId(token, hashtag, orderDate);
                 res.status(200).send({ Albuns: response });
             }
             catch (error) {

@@ -33,7 +33,8 @@ describe("endpoint create user", () => {
                 email:"diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -51,7 +52,8 @@ describe("endpoint create user", () => {
                 email:"",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl:""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -69,7 +71,8 @@ describe("endpoint create user", () => {
                 email:"diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -87,7 +90,8 @@ describe("endpoint create user", () => {
                 email:"diegogmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -105,7 +109,8 @@ describe("endpoint create user", () => {
                 email:"diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -122,7 +127,8 @@ describe("endpoint create user", () => {
                 email:"diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "REN"
+                role: "REN",
+                photoUrl: ""
             }
             await userBusiness.createUser(user)
         } catch (error) {
@@ -137,7 +143,8 @@ describe("endpoint create user", () => {
             email:"diego@gmail.com",
             nickname: "dzmGodz",
             password: "Labenu123456",
-            role: "ADMIN"
+            role: "ADMIN",
+            photoUrl: ""
         }
         const token = await userBusiness.createUser(user)
 
@@ -189,7 +196,7 @@ describe("test endpoint login", () => {
     })
 
     test("Sucessfully login with email when all informations are correct", async() => {
-        userDatabase = {getUser: jest.fn((id: string) => new User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User.stringToUserRole("ADMIN")))}
+        userDatabase = {getUser: jest.fn((id: string) => new User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User.stringToUserRole("ADMIN"), ""))}
         hashManager = {compare: jest.fn((password: string, cypherPassword: string) => true)}
 
         const userBusiness = new UserBusiness(userDatabase, idGenerator, hashManager, authenticator)
@@ -205,7 +212,7 @@ describe("test endpoint login", () => {
     })
 
     test("Sucessfully login with nickname when all informations are correct", async() => {
-        userDatabase = {getUser: jest.fn((id: string) => new User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User.stringToUserRole("ADMIN")))}
+        userDatabase = {getUser: jest.fn((id: string) => new User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User.stringToUserRole("ADMIN"), ""))}
         hashManager = {compare: jest.fn((password: string, cypherPassword: string) => true)}
 
         const userBusiness = new UserBusiness(userDatabase, idGenerator, hashManager, authenticator)

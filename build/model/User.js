@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = exports.User = void 0;
 class User {
-    constructor(id, name, email, nickname, password, role) {
+    constructor(id, name, email, nickname, password, role, photoUrl) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.role = role;
+        this.photoUrl = photoUrl;
     }
     getId() {
         return this.id;
@@ -28,6 +29,9 @@ class User {
     getRole() {
         return this.role;
     }
+    getPhotoUrl() {
+        return this.photoUrl;
+    }
     setId(id) {
         this.id = id;
     }
@@ -46,6 +50,9 @@ class User {
     setRole(role) {
         this.role = role;
     }
+    setPhotoUrl(photoUrl) {
+        this.photoUrl = photoUrl;
+    }
     static stringToUserRole(input) {
         switch (input) {
             case "NORMAL":
@@ -60,7 +67,7 @@ class User {
         if (!user) {
             throw new Error("User not found");
         }
-        return new User(user.id, user.name, user.email, user.nickname, user.password, User.stringToUserRole(user.role));
+        return new User(user.id, user.name, user.email, user.nickname, user.password, User.stringToUserRole(user.role), user.photoUrl);
     }
 }
 exports.User = User;

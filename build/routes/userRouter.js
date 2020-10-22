@@ -10,4 +10,9 @@ exports.userRouter = express_1.default.Router();
 const userController = new UserController_1.UserController();
 exports.userRouter.post("/signup", userController.signup);
 exports.userRouter.post("/login", userController.login);
+exports.userRouter.get("/", userController.getUsers);
+exports.userRouter.post("/follow", userController.followUser);
+exports.userRouter.post("/unfollow", userController.unfollowUser);
+exports.userRouter.get("/feed", userController.getFeed);
+exports.userRouter.get("/friends", userController.getFriends);
 //# sourceMappingURL=userRouter.js.map

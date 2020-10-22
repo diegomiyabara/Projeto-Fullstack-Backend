@@ -37,7 +37,8 @@ describe("endpoint create user", () => {
                 email: "diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -55,7 +56,8 @@ describe("endpoint create user", () => {
                 email: "",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -73,7 +75,8 @@ describe("endpoint create user", () => {
                 email: "diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -91,7 +94,8 @@ describe("endpoint create user", () => {
                 email: "diegogmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -109,7 +113,8 @@ describe("endpoint create user", () => {
                 email: "diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "labenu123456",
-                role: "ADMIN"
+                role: "ADMIN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -126,7 +131,8 @@ describe("endpoint create user", () => {
                 email: "diego@gmail.com",
                 nickname: "dzmGodz",
                 password: "Labenu123456",
-                role: "REN"
+                role: "REN",
+                photoUrl: ""
             };
             yield userBusiness.createUser(user);
         }
@@ -141,7 +147,8 @@ describe("endpoint create user", () => {
             email: "diego@gmail.com",
             nickname: "dzmGodz",
             password: "Labenu123456",
-            role: "ADMIN"
+            role: "ADMIN",
+            photoUrl: ""
         };
         const token = yield userBusiness.createUser(user);
         expect(token).toBe("fake token");
@@ -191,7 +198,7 @@ describe("test endpoint login", () => {
         }
     }));
     test("Sucessfully login with email when all informations are correct", () => __awaiter(void 0, void 0, void 0, function* () {
-        userDatabase = { getUser: jest.fn((id) => new User_1.User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User_1.User.stringToUserRole("ADMIN"))) };
+        userDatabase = { getUser: jest.fn((id) => new User_1.User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User_1.User.stringToUserRole("ADMIN"), "")) };
         hashManager = { compare: jest.fn((password, cypherPassword) => true) };
         const userBusiness = new UserBusiness_1.UserBusiness(userDatabase, idGenerator, hashManager, authenticator);
         const user = {
@@ -202,7 +209,7 @@ describe("test endpoint login", () => {
         expect(result).toBe("fake token");
     }));
     test("Sucessfully login with nickname when all informations are correct", () => __awaiter(void 0, void 0, void 0, function* () {
-        userDatabase = { getUser: jest.fn((id) => new User_1.User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User_1.User.stringToUserRole("ADMIN"))) };
+        userDatabase = { getUser: jest.fn((id) => new User_1.User("id", "Diego Miyabara", "diego@gmail.com", "dzmGodz", "cypherPassword", User_1.User.stringToUserRole("ADMIN"), "")) };
         hashManager = { compare: jest.fn((password, cypherPassword) => true) };
         const userBusiness = new UserBusiness_1.UserBusiness(userDatabase, idGenerator, hashManager, authenticator);
         const user = {
