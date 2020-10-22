@@ -16,7 +16,7 @@ export class UserBusiness {
     ){}
 
     async createUser(user: UserInputDTO) {        
-        if(!user.name || !user.email || !user.nickname || !user.password ) {
+        if(!user.name || !user.email || !user.nickname || !user.password) {
             throw new InvalidParameterError("All inputs must be filled!")
         }
 
@@ -44,7 +44,7 @@ export class UserBusiness {
 
         const hashPassword = await this.hashManager.hash(user.password);
 
-        await this.userDatabase.createUser(id, user.name, user.email, user.nickname, hashPassword, user.role);
+        await this.userDatabase.createUser(id, user.name, user.email, user.nickname, hashPassword, user.role, user.photoUrl);
 
         const accessToken = this.authenticator.generateToken({ id, name: user.name, role: user.role });
 
@@ -91,7 +91,8 @@ export class UserBusiness {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                nickname: user.nickname
+                nickname: user.nickname,
+                photoUrl: user.photoUrl
             }
         })
         

@@ -5,7 +5,8 @@ export class User{
     private email: string,
     private nickname: string,
     private password: string,
-    private role: UserRole
+    private role: UserRole,
+    private photoUrl: string
     ){}
 
     getId(){
@@ -32,6 +33,10 @@ export class User{
         return this.role;
     }
 
+    getPhotoUrl() {
+        return this.photoUrl
+    }
+
     setId(id: string){
         this.id = id;
     }
@@ -56,6 +61,10 @@ export class User{
         this.role = role;
     }
 
+    setPhotoUrl(photoUrl: string) {
+        this.photoUrl = photoUrl
+    }
+
     static stringToUserRole(input: string): UserRole{
         switch (input) {
             case "NORMAL":
@@ -71,7 +80,7 @@ export class User{
         if(!user) {
             throw new Error("User not found")
         }
-        return new User(user.id, user.name, user.email, user.nickname, user.password, User.stringToUserRole(user.role));
+        return new User(user.id, user.name, user.email, user.nickname, user.password, User.stringToUserRole(user.role), user.photoUrl);
     }
 }
 
@@ -81,6 +90,7 @@ export interface UserInputDTO{
     password: string;
     nickname: string;
     role: string;
+    photoUrl: string;
 }
 
 export interface LoginInputDTO{
@@ -92,7 +102,8 @@ export interface UserOutputDTO {
     id: string,
     name: string,
     email: string,
-    nickname: string
+    nickname: string,
+    photoUrl: string
 }
 
 export enum UserRole{

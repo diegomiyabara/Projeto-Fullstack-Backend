@@ -24,7 +24,8 @@ export class UserController {
                 email: req.body.email,
                 nickname: req.body.nickname,
                 password: req.body.password,
-                role: req.body.role
+                role: req.body.role,
+                photoUrl: req.body.photoUrl
             }
 
             const token = await UserController.userBusiness.createUser(input);

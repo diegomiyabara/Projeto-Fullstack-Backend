@@ -17,7 +17,8 @@ export class UserDatabase extends BaseDatabase {
         dbModel.email,
         dbModel.nickname,
         dbModel.password,
-        dbModel.role
+        dbModel.role,
+        dbModel.photoUrl
       )
     );
   }
@@ -28,7 +29,8 @@ export class UserDatabase extends BaseDatabase {
     email: string,
     nickname: string,
     password: string,
-    role: string
+    role: string,
+    photoUrl: string
   ): Promise<void> {
     try {
       await super.getConnection()
@@ -38,7 +40,8 @@ export class UserDatabase extends BaseDatabase {
           email,
           nickname,
           password,
-          role
+          role,
+          photoUrl
         })
         .into(this.tableName);
     } catch (error) {
@@ -111,10 +114,11 @@ export class UserDatabase extends BaseDatabase {
     try {
       const response = await super.getConnection()
       .raw(`
-        SELECT user_id, user_to_follow_id as friend_id, name, nickname
+        SELECT user_id, user_to_follow_id as friend_id, name, nickname, photoUrl
         FROM ${this.tableName}
         JOIN ${this.relationsTableName} ON ${this.tableName}.id = ${this.relationsTableName}.user_to_follow_id
         WHERE ${this.relationsTableName}.user_id = "${user_id}"
+        ORDER BY ${this.tableName}.name ASC;
       `)
 
       return response[0]
@@ -136,7 +140,7 @@ export class UserDatabase extends BaseDatabase {
       const response = await super.getConnection()
       .raw(`
       SELECT ${this.tableName}.id, ${this.tableName}.name, ${this.tableName}.nickname, ${this.albumTableName}.id as album_id, ${this.albumTableName}.name as album_name, ${this.albumTableName}.description as album_description, ${this.albumTableName}.albumImageUrl as album_imageUrl,
-      ${this.albumTableName}.createdAt as album_createdAt
+      ${this.albumTableName}.createdAt as album_createdAt, ${this.tableName}.photoUrl as user_photo
       FROM ${this.tableName}
       JOIN ${this.albumTableName} on ${this.tableName}.id = ${this.albumTableName}.user_id
       JOIN ${this.relationsTableName} on ${this.albumTableName}.user_id = ${this.relationsTableName}.user_to_follow_id
