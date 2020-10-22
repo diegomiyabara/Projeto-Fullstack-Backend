@@ -70,10 +70,6 @@ export class AlbumBusiness {
             throw new NotFoundError("Album not found!")
         }
 
-        if(user.id !== response.user_id && user.role !== "ADMIN"){
-            throw new InsuficientAuth("You can only acess your own albuns!")
-        }
-
         return response
     }
 }
