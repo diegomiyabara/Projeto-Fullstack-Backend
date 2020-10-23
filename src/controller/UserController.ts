@@ -35,8 +35,6 @@ export class UserController {
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
         }
-
-        await BaseDatabase.destroyConnection();
     }
 
     async login(req: Request, res: Response) {
@@ -52,8 +50,6 @@ export class UserController {
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
         }
-
-        await BaseDatabase.destroyConnection();
     }
 
     async getUsers(req: Request, res: Response) {
@@ -66,9 +62,7 @@ export class UserController {
             res.status(200).send({Users: users})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            await BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async followUser(req: Request, res: Response) {
@@ -81,8 +75,6 @@ export class UserController {
             res.status(200).send({message: `Você está seguindo agora ${followed.name}!`})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
         }
     }
 
@@ -96,8 +88,6 @@ export class UserController {
             res.status(200).send({message: `Você deixou de seguir ${followed.name}!`})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
         }
     }
 
@@ -110,9 +100,7 @@ export class UserController {
             res.status(200).send({Friends: friends})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async getFeed(req: Request, res: Response) {
@@ -126,8 +114,6 @@ export class UserController {
             res.status(200).send({Feed: feed})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 }

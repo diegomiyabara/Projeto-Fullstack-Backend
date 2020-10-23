@@ -28,9 +28,7 @@ export class ImageController {
             res.status(200).send({ message: `Image added to album ${response.name} sucessfully!` });
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async getAlbumImages(req: Request, res: Response) {
@@ -45,9 +43,7 @@ export class ImageController {
             res.status(200).send({Images: response})
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async getImageById(req: Request, res: Response) {
@@ -60,8 +56,6 @@ export class ImageController {
             res.status(200).send(response)
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 }
