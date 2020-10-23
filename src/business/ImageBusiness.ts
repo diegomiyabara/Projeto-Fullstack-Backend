@@ -65,10 +65,6 @@ export class ImageBusiness {
 
         const response = await this.imageDatabase.getImageById(id)
 
-        if (response.user_id !== user.id) {
-            throw new InsuficientAuth("You can only acess your own images")
-        }
-
         return response
     }
 }
