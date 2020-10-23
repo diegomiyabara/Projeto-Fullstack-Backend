@@ -28,9 +28,7 @@ export class AlbumController {
             res.status(200).send({ message: `Album ${input.name} created sucessfully!` });
         } catch (error) {
             res.status(error.code || 400).send({ message: error.message });
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async getAllAlbuns (req: Request, res: Response) {
@@ -43,9 +41,7 @@ export class AlbumController {
             res.status(200).send({Albuns: response})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
     
     async getAlbunsByUserId (req: Request, res: Response) {
@@ -59,9 +55,7 @@ export class AlbumController {
             res.status(200).send({Albuns: response})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 
     async getAlbumById(req: Request, res: Response) {
@@ -74,8 +68,6 @@ export class AlbumController {
             res.status(200).send({Album: response})
         } catch (error) {
             res.status(error.code || 400).send({message: error.message})
-        } finally {
-            BaseDatabase.destroyConnection()
-        }
+        } 
     }
 }
