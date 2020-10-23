@@ -99,6 +99,14 @@ export class UserBusiness {
         return formatUsers
     }
 
+    async getUserById(token: string): Promise<UserOutputDTO> {
+        const user = this.authenticator.getData(token)
+
+        const userDb = await this.userDatabase.getUserById(user.id)
+
+        return userDb
+    }
+
     async followUser(token: string, user_to_follow_id: string): Promise<UserOutputDTO> {
         const user = this.authenticator.getData(token)
 

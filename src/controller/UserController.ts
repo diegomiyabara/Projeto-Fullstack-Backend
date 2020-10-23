@@ -65,6 +65,18 @@ export class UserController {
         } 
     }
 
+    async getUserById(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string
+
+            const user = await UserController.userBusiness.getUserById(token)
+
+            res.status(200).send({User: user})
+        } catch (error) {
+            res.status(error.code || 400).send({message: error.message})
+        }
+    }
+
     async followUser(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string
