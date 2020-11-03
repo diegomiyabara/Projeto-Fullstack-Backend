@@ -1,7 +1,7 @@
 <h1 align="center"> 🪐Pic Memories🪐 </h1>
 
 <p align="center"><img src="https://img.shields.io/static/v1?label=Node&message=js&color=green&style=flat&logo=NODEJS"/>
-<img src="https://img.shields.io/static/v1?label=typescript&message=framework&color=grey&style=flat&logo=TYPESCRIPT"/>
+<img src="https://img.shields.io/static/v1?label=typescript&message=framework&color=lightgrey&style=flat&logo=TYPESCRIPT"/>
 <img src="https://img.shields.io/static/v1?label=S3&message=AWS&color=black&style=flat&logo=S3AWS"/>
 <img src="https://img.shields.io/static/v1?label=Heroku&message=deploy&color=purple&style=flat&logo=HEROKU"/>
 <img src="https://img.shields.io/static/v1?label=MYSQL&message=database&color=blue&style=flat&logo=MYSQL"/></p>
