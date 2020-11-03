@@ -9,8 +9,8 @@
 
 
 ## Descrição do Projeto
-<p align="justify"> O projeto Pic Memories foi o primeiro projeto fullstack que realizamos de ponta a ponta, este é o repositório do FrontEnd. Ainda existem algumas funcionalidades a serem implementadas mas o básico está funcionando perfeitamente.</p>
-<p align="justify"> O objetivo foi criar basicamente uma rede social de scrapbooks, onde os usuários criam suas contas, organizam suas fotos por álbuns e as pessoas que as seguem podem visualizar seus albuns. A aplicação foi desenvolvida para desktops então não temos tanta responsividade para mobile.</p>
+<p align="justify"> O projeto Pic Memories foi o primeiro projeto fullstack que realizamos de ponta a ponta, este é o repositório do BackEnd. Ainda existem algumas funcionalidades a serem implementadas mas o básico está funcionando perfeitamente.</p>
+<p align="justify"> O objetivo foi criar basicamente uma rede social de scrapbooks, onde os usuários criam suas contas, organizam suas fotos por álbuns e as pessoas que as seguem podem visualizar seus albuns. </p>
 <p align="justify">As APIs da aplicação foram elaboradas por mim e publicadas no Heroku.</p>
 
 #### Status do Projeto: Em desenvolvimento :warning:
@@ -36,13 +36,9 @@
     - Acessar perfil de amigos.
     - etc.
     
-## Deploy da Aplicação pelo s3 da AWS: :dash:
+## Deploy da Aplicação pelo Heroku: :dash:
 
-> http://http://pic-memories.s3-website-us-east-1.amazonaws.com/
-<p>Conta de acesso (Peço que não crie contas na aplicação, pois pode sobrecarregar a API):</p>
-<p>Usuário: diego@gmail.com</p>
-<p>senha: Labenu123456</p>
-<p>Ou fiquem à vontade para criarem suas contas! ;) </p>
+> https://pic-memories.herokuapp.com/
 
 ## Pré-requisitos :warning:
 
@@ -53,16 +49,23 @@
     2. Acesse a pasta na qual foi clonado
     3. `npm install` para instalar todas as dependências
     4. `npm run start` para rodas localmente o projeto
-        -OBS: Abrir no navegador como mobile
-    5. `npm run build` para gerar uma versão estática do projeto (que ficará na pasta `build`)
     
 ## Libs utilizadas :books:
 
-- React.js
-- Router
-- Styled-Components
-- Axios
-- Material-ui
+- Typescript
+- ts-node
+- express
+- cors
+- bcryptjs
+- jest
+- jsonwebtoken
+- knex
+- uuid
+- dayjs
+- dotenv
+- mysql
+- ts-jest
+- ts-node-dev
 
 ## Contato
 - [Linkedin](https://www.linkedin.com/in/diegomiyabara/)
