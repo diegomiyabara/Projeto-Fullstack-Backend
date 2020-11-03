@@ -49,6 +49,7 @@
     2. Acesse a pasta na qual foi clonado
     3. `npm install` para instalar todas as dependências
     4. `npm run start` para rodas localmente o projeto
+    5. Use o postman ou algum software de sua preferência utilize sempre o http://localhost:3000/ (Os endpoints estão nos arquivos ./src/routes )
     
 ## Libs utilizadas :books:
 
